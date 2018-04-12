@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#written by matthew hannigan on April 11th 2018
+#purpose is to take a file with a name of the form qxxx.filename.inp.out (or generally, a.b.c.d) to give a file named filename.xyz (or generally, b.xyz)
+
+array=`ls *.inp.out`                                        #makes an array of files with the extension ".inp.out"
+mkdir xyzFiles                                              #makes a directory to put the final "filename.xyz" files in
+for element in $array                                       #for elements with the extesntion .inp.out 
+do
+        cp $element `echo "${element%.*}"`a                 #copy file, remove the last extension (.out) from the filename and adds an a, giving a file "qxxx.filename.inpa"
+done                                                        #the .inpa is important because the directory may also contain files with ".inp", preventing overrifing these files
+array2=`ls *.inpa`                                          #makes an array of files with the extension ".inpa"
+for element in $array2                                      #for elements with the extension ".inpa"
+do
+        mv $element `echo "${element#*.}"`                  #remove the first part (the "q###.") from the filename, giving a file "filename.inpa"
+done
+array3=`ls *.inpa`                                          #make an array of files with the extension ".inpa" 
+for element in $array3                                      #for elements with the extension ".inpa"
+do
+        mv $element xyzFiles/`echo "${element%.*}"`.xyz     #move file into the XYZ folder and rename it, swapping the extension from .inpa to .xyz
+done
